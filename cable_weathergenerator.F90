@@ -119,8 +119,8 @@ CONTAINS
       ALLOCATE ( WG%VapPPa1500         (np) )  ! 15:00 water vapour pressure [Pa]
       ALLOCATE ( WG%PhiSd              (np) )  ! downward solar irradiance [W/m2]
       ALLOCATE ( WG%PhiLd              (np) )  ! down longwave irradiance  [W/m2]
-      ALLOCATE ( WG%Precip             (np) )  ! precip [mm/h]->[mm/s]
-      ALLOCATE ( WG%Snow               (np) )  ! precip [mm/h]->[mm/s]
+      ALLOCATE ( WG%Precip             (np) )  ! precip [mm/h] of hourly output -> [mm/s] of 3-hour output
+      ALLOCATE ( WG%Snow               (np) )  ! precip [mm/h] of hourly output -> [mm/s] of 3-hour output
       ALLOCATE ( WG%Wind               (np) )  ! wind   [m/s]
       ALLOCATE ( WG%Temp               (np) )  ! temp   [degC]->[K]
       ALLOCATE ( WG%VapPPa             (np) )  ! MMY vapour pressure [Pa] ! vapour pressure [mb] !!!!!!!!!!!!! should change to pa
@@ -327,10 +327,11 @@ CONTAINS
           WRITE(*,*) "Only works for integer hourly timestep! tstep = ", ritime
           STOP  "cable_weathergenerator.F90!"
       ENDIF
+      ! Becuase the timestep of output is 3-hour, both 3 p.m. and 6 p.m. can have value.
       IF ((ritime >= 15. .AND. ritime < 16.) .OR. &
           (ritime >= 18. .AND. ritime < 19.)) THEN
-          WG%Precip = WG%PrecipDay*1000./2./3600. ! mm/h->mm/s, Rainf/GSWP3.BC.Rainf.3hrMap
-          WG%Snow   = WG%SnowDay*1000./2./3600.   ! mm/h->mm/s, Snowf/GSWP3.BC.Snowf.3hrMap
+          WG%Precip = WG%PrecipDay*1000./2./WG%delT ! mm/day->mm/s, Rainf/GSWP3.BC.Rainf.3hrMap
+          WG%Snow   = WG%SnowDay*1000./2./WG%delT   ! mm/day->mm/s, Snowf/GSWP3.BC.Snowf.3hrMap
       ELSE
           WG%Precip = 0.
           WG%Snow   = 0.

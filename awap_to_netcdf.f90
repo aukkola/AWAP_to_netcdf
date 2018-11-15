@@ -48,7 +48,7 @@ PROGRAM awap_to_netcdf
     ktauday   = INT(24.0*3600.0/dels) ! ktauday = 8
 
     YearStart = 2000
-    YearEnd   = 2000 ! 2017
+    YearEnd   = 2005 ! 2017
     CurYear   = YearStart
 
     CALL inout_path(filename)
