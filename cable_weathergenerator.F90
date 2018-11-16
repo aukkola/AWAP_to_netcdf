@@ -239,6 +239,7 @@ CONTAINS
                          (0.39 * (WG%TempMaxDay - WG%TempMinDayNext))  ! To
       WG%TempSunsetPrev  = WG%TempMaxDayPrev - &
                          (0.39 * (WG%TempMaxDayPrev - WG%TempMinDay))  ! * To-24h
+      WG%TempRangeDay    = WG%TempMaxDay - WG%TempMinDay               ! alpha = Tx-Tn
       WG%TempRangeAft    = WG%TempMaxDay - WG%TempSunset               ! R = Tx-To
       WG%TempNightRate   = (WG%TempMinDayNext - WG%TempSunset)/ &
                            SQRT(TimeSunriseNext-WG%TimeSunset)   ! b = (Tp-To)/sqrt(Hp-Ho)
