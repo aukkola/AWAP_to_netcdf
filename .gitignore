@@ -2,3 +2,6 @@
 awap_to_netcdf.dSYM/*
 *.mod
 *.txt
+*.sh.o*
+awap_to_netcdf
+*.sh

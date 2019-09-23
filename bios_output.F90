@@ -210,8 +210,8 @@ MODULE bios_output
     ! Write to temporary time variable:
     ! hours from 1901-01-01-00:00
       IF (CurYear >= 1901) THEN
-         timetemp = DBLE((INT((CurYear - 1991)/4.)*(366+365*3) &
-                    + MOD((CurYear - 1991),4)*365)*24.         &
+         timetemp = DBLE((INT((CurYear - 1901)/4.)*(366+365*3) &
+                    + MOD((CurYear - 1901),4)*365)*24.         &
                     + (ktau-1)*delh)
       ELSE
          PRINT *, "ERROR: CurYear should be larger than 1990"
