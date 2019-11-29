@@ -9,4 +9,4 @@ export CFLAGS='-O0 -fp-model precise'
 export LDFLAGS='-L'$NCDIR' -O0'
 export LD='-lnetcdf -lnetcdff'
 
-make -f Makefile_offline_BACKUP
+make -f Makefile

@@ -97,7 +97,7 @@ MODULE cable_bios_met_obs_params
       ALLOCATE ( filename%vph15_file(file_num)   )
 
     ! read in header
-      hdr_file = TRIM(file_path)//"/2017/bom-rain_recal-day-20170626-20170626.hdr"
+      hdr_file = TRIM(file_path)//"/1999/bom-rain_recal-day-19990626-19990626.hdr"
       CALL GET_UNIT(iunit)
       CALL ReadArcFltHeader( iunit, hdr_file,    &
                              MaskCols, MaskRows, & ! Landmask col and row dimensions
