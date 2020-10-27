@@ -5,3 +5,4 @@ awap_to_netcdf.dSYM/*
 *.sh.o*
 awap_to_netcdf
 *.sh
+*/*.pdf

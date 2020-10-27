@@ -28,8 +28,8 @@ MODULE bios_io_mod !    MMY
             WRITE (*, *) '================== USAGE =================='
             WRITE (*, *) 'e.g...             '
             WRITE (*, *) '                   '
-            WRITE (*, *) 'Makefile /short/w35/mm3972/data/AWAP_data &
-                          /short/w35/mm3972/data/AWAP_to_netcdf'
+            WRITE (*, *) 'Makefile /g/data/w35/mm3972/data/AWAP/meta_data &
+                          /g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf'
             WRITE (*, *) '                                           '
             STOP
          ELSE
@@ -39,8 +39,8 @@ MODULE bios_io_mod !    MMY
 
       ELSE
 
-         filename%path_in  = "/short/w35/mm3972/data/AWAP_data"
-         filename%path_out = "/short/w35/mm3972/data/AWAP_to_netcdf"
+         filename%path_in  = "/g/data/w35/Shared_data/AWAP_raw_data" ! MMY
+         filename%path_out = "/g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf" ! MMY
 
       END IF
 
@@ -110,7 +110,7 @@ MODULE bios_io_mod !    MMY
    ! READING MET DATA
       ! rain
       commandline = 'find '//TRIM(filename%path_in)//\
-          '/awap_rain_mm_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+          '/awap_rain_mm_day/bom_awap_daily_rain_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_rain.txt'
       ok = systemqq(commandline)
@@ -122,7 +122,7 @@ MODULE bios_io_mod !    MMY
 
       ! rad
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_rad_MJ_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+           '/awap_rad_MJ_day/bom_awap_daily_rad_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_rad.txt'
       ok = systemqq(commandline)
@@ -134,7 +134,7 @@ MODULE bios_io_mod !    MMY
 
       ! wind
       commandline = 'find '//TRIM(filename%path_in)//\
-      '/mcvicar_windspeed_ms_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+      '/mcvicar_windspeed_ms_day/mcvicar_daily_windspeed_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_wind.txt'
       ok = systemqq(commandline)
@@ -146,7 +146,7 @@ MODULE bios_io_mod !    MMY
 
       ! tmax
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_tmax_C_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+           '/awap_tmax_C_day/bom_awap_daily_tmax_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_tmax.txt'
       ok = systemqq(commandline)
@@ -158,7 +158,7 @@ MODULE bios_io_mod !    MMY
 
       ! tmin
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_tmin_C_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+           '/awap_tmin_C_day/bom_awap_daily_tmin_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_tmin.txt'
       ok = systemqq(commandline)
@@ -170,7 +170,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph09
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph09_hpa_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+        '/awap_vph09_hpa_day/bom_awap_daily_vph09_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph09.txt'
       ok = systemqq(commandline)
@@ -182,7 +182,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph15
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph15_hpa_day_2000-2017 -name "*.flt" -fprintf ./temp.txt "%p\n"'
+        '/awap_vph15_hpa_day/bom_awap_daily_vph15_1970-1989 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph15.txt'
       ok = systemqq(commandline)

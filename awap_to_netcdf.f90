@@ -47,13 +47,13 @@ PROGRAM awap_to_netcdf
     kstart    = 1
     ktauday   = INT(24.0*3600.0/dels) ! ktauday = 8
 
-    YearStart = 1999
-    YearEnd   = 1999
+    YearStart = 1970 ! MMY
+    YearEnd   = 1989 ! MMY
     CurYear   = YearStart
 
     CALL inout_path(filename)
 
-    rain_path    = TRIM(filename%path_in)//"/awap_rain_mm_day_2000-2017"
+    rain_path    = TRIM(filename%path_in)//"/awap_rain_mm_day/bom_awap_daily_rain_1970-1989" ! MMY
 
     CALL cable_bios_init(WG, dels, CurYear, kend, ktauday, rain_path, filename)
        ! INCLUDING:
@@ -68,11 +68,11 @@ PROGRAM awap_to_netcdf
 ! *************************** 2. Loop over years *******************************
     DO YYYY = YearStart, YearEnd ! YYYY= CABLE_USER%YearStart,  CABLE_USER%YearEnd
        CurYear = YYYY
-	     IF ((MOD(YYYY,4) == 0 .AND. MOD(YYYY,100) /= 0) .OR. MOD(YYYY,400) == 0)&
+             IF ((MOD(YYYY,4) == 0 .AND. MOD(YYYY,100) /= 0) .OR. MOD(YYYY,400) == 0)&
        THEN                     ! leap year
-	        LOY = 366
-	     ELSE
-	        LOY = 365
+                LOY = 366
+             ELSE
+                LOY = 365
        ENDIF
 
        kend = NINT(24.0*3600.0/dels) * LOY ! rounds its argument to the nearest whole number.

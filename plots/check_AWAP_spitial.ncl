@@ -13,16 +13,16 @@ end setvalues
 
 begin
 
-flt_path = "/short/w35/mm3972/data/AWAP_data/"
+flt_path = "/g/data/w35/mm3972/data/AWAP/meta_data/"
 
 flt1      = (/\
-           "awap_rain_mm_day_2000-2017/",\
-           "awap_rad_MJ_day_2000-2017/",\
-           "awap_tmax_C_day_2000-2017/",\
-           "awap_tmin_C_day_2000-2017/",\
-           "mcvicar_windspeed_ms_day_2000-2017/",\
-           "awap_vph09_hpa_day_2000-2017/",\
-           "awap_vph15_hpa_day_2000-2017/"\
+           "bom_awap_daily_rain_2018-2019/",\
+           "bom_awap_daily_rad_2018-2019/",\
+           "bom_awap_daily_tmax_2018-2019/",\
+           "bom_awap_daily_tmin_2018-2019/",\
+           "mcvicar_daily_windspeed_ms_2018-2019/",\
+           "bom_awap_daily_vph09_2018-2019/",\
+           "bom_awap_daily_vph15_2018-2019/"\
            /)
 flt2      = (/\
             "/bom-rain_recal-day-",\
@@ -35,7 +35,7 @@ flt2      = (/\
             /)
 
 
-nc_path = "/short/w35/mm3972/data/AWAP_to_netcdf/"
+nc_path = "/g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf/"
 
 var_name = (/\
               "Rainf","Snowf",\
@@ -53,8 +53,8 @@ vname = (/\
           /)
 
 ;***************** �� �� *******************
-year_s = 2000
-year_e = 2005
+year_s = 2018
+year_e = 2019
 year_sum = year_e-year_s+1
 
 ;_____________________________ PLOT ___________________________________
@@ -161,8 +161,13 @@ do year = year_s,year_e
       print("flt data var_name = " +var_num)
       do month = 1,12
         do day = 1,dom(month-1)
-          fltname = flt_path+flt1(var_num)+year+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
-                    "-"+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+".flt"
+          if year .eq. 2019 .and. var_num .eq. 4 then
+            fltname = flt_path+flt1(var_num)+year+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
+                      "-"+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+"_synth.flt"
+          else
+            fltname = flt_path+flt1(var_num)+year+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
+                      "-"+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+".flt"
+          end if
           tmp = fbindirread(fltname,0,(/681,841/),"float")
          ;printVarSummary(tmp)
           var_flt(var_num,:,:) = var_flt(var_num,:,:) + tmp
@@ -187,7 +192,7 @@ var_day(2,:,:) = var_day(2,680:0,:)/year_sum
 var_day(3,:,:) = var_day(3,680:0,:)/year_sum
 var_day(4,:,:) = var_day(4,680:0,:)/year_sum
 
-ncname = "/short/w35/mm3972/data/AWAP_to_netcdf/Rainf/AWAP.Rainf.3hr.2000.nc"
+ncname = "/g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf/Rainf/AWAP.Rainf.3hr.2018.nc"
 f = addfile (ncname,"r")
 var_day!0 ="var"
 var_day!1 ="lat"
@@ -353,7 +358,7 @@ do year =year_s, year_e
   day_sum = sum(dom)
   do var_num = 0,6
     print("gswp data var_name = " +var_num)
-    ncname = "/g/data1a/wd9/MetForcing/Global/GSWP3_2017/"+var_name(var_num)+"/GSWP3.BC."+var_name(var_num)+".3hrMap."+year+".nc"
+    ncname = "/g/data/wd9/MetForcing/Global/GSWP3_2017/"+var_name(var_num)+"/GSWP3.BC."+var_name(var_num)+".3hrMap.2010.nc"
     f = addfile (ncname,"r")
 
     tmp = new((/360,720/),float)
@@ -373,7 +378,7 @@ var_gswp = var_gswp/year_sum
 
 var_G = new((/5,360,720/),float)
 var_G = 0.0
-var_G@_FillValue = var_gswp@_Fillvalue
+;var_G@_FillValue = var_gswp@_Fillvalue
 
 ; rainfall+snowfall
 var_G(0,:,:) = (var_gswp(0,:,:)+var_gswp(1,:,:))*3600.*3*8

@@ -1,7 +1,7 @@
 #!/bin/bash
 module unload netcdf
-module load netcdf/4.2.1.1
-module load intel-fc/17.0.1.132 netcdf
+module load netcdf/4.7.1
+#module load intel-fc/17.0.1.132 netcdf
 export NCDIR=$NETCDF_ROOT'/lib/Intel'
 export NCMOD=$NETCDF_ROOT'/include/Intel'
 export FC=$F90
