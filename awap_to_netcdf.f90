@@ -47,13 +47,14 @@ PROGRAM awap_to_netcdf
     kstart    = 1
     ktauday   = INT(24.0*3600.0/dels) ! ktauday = 8
 
-    YearStart = 1970 ! MMY
-    YearEnd   = 1989 ! MMY
+    YearStart = 1969 ! MMY
+    YearEnd   = 1969 ! MMY
     CurYear   = YearStart
 
     CALL inout_path(filename)
 
-    rain_path    = TRIM(filename%path_in)//"/awap_rain_mm_day/bom_awap_daily_rain_1970-1989" ! MMY
+    rain_path    = TRIM(filename%path_in)//"/awap_rain_mm_day/bom_awap_climatology_rain_1970-1999" ! MMY
+    ! MMY : rain_path must be the used folder, since the number of files is accounted by this folder
 
     CALL cable_bios_init(WG, dels, CurYear, kend, ktauday, rain_path, filename)
        ! INCLUDING:
