@@ -13,16 +13,16 @@ end setvalues
 
 begin
 
-flt_path = "/g/data/w35/mm3972/data/AWAP/meta_data/"
+flt_path = "/g/data/w35/Shared_data/AWAP_raw_data/"
 
 flt1      = (/\
-           "bom_awap_daily_rain_2018-2019/",\
-           "bom_awap_daily_rad_2018-2019/",\
-           "bom_awap_daily_tmax_2018-2019/",\
-           "bom_awap_daily_tmin_2018-2019/",\
-           "mcvicar_daily_windspeed_ms_2018-2019/",\
-           "bom_awap_daily_vph09_2018-2019/",\
-           "bom_awap_daily_vph15_2018-2019/"\
+           "awap_rain_mm_day/bom_awap_daily_rain_1970-1989/",\
+           "awap_rad_MJ_day/bom_awap_daily_rad_1970-1989/",\
+           "awap_tmax_C_day/bom_awap_daily_tmax_1970-1989/",\
+           "awap_tmin_C_day/bom_awap_daily_tmin_1970-1989/",\
+           "mcvicar_windspeed_ms_day/mcvicar_daily_windspeed_1970-1989/",\
+           "awap_vph09_hpa_day/bom_awap_daily_vph09_1970-1989/",\
+           "awap_vph15_hpa_day/bom_awap_daily_vph15_1970-1989/"\
            /)
 flt2      = (/\
             "/bom-rain_recal-day-",\
@@ -53,8 +53,8 @@ vname = (/\
           /)
 
 ;***************** �� �� *******************
-year_s = 2018
-year_e = 2019
+year_s = 1985
+year_e = 1986
 year_sum = year_e-year_s+1
 
 ;_____________________________ PLOT ___________________________________
@@ -161,11 +161,11 @@ do year = year_s,year_e
       print("flt data var_name = " +var_num)
       do month = 1,12
         do day = 1,dom(month-1)
-          if year .eq. 2019 .and. var_num .eq. 4 then
-            fltname = flt_path+flt1(var_num)+year+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
+          if (year .eq. 2019 .or. year .le. 1974) .and. (var_num .eq. 4) then
+            fltname = flt_path+flt1(var_num)+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
                       "-"+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+"_synth.flt"
           else
-            fltname = flt_path+flt1(var_num)+year+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
+            fltname = flt_path+flt1(var_num)+flt2(var_num)+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+\
                       "-"+year+sprinti("%0.2i",month)+sprinti("%0.2i",day)+".flt"
           end if
           tmp = fbindirread(fltname,0,(/681,841/),"float")
@@ -358,7 +358,7 @@ do year =year_s, year_e
   day_sum = sum(dom)
   do var_num = 0,6
     print("gswp data var_name = " +var_num)
-    ncname = "/g/data/wd9/MetForcing/Global/GSWP3_2017/"+var_name(var_num)+"/GSWP3.BC."+var_name(var_num)+".3hrMap.2010.nc"
+    ncname = "/g/data/wd9/MetForcing/Global/GSWP3_2017/"+var_name(var_num)+"/GSWP3.BC."+var_name(var_num)+".3hrMap."+year+".nc"
     f = addfile (ncname,"r")
 
     tmp = new((/360,720/),float)

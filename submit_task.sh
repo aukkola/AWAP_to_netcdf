@@ -3,7 +3,7 @@
 #PBS -m ae
 #PBS -P w35
 #PBS -q normal
-#PBS -l walltime=1:30:00
+#PBS -l walltime=20:00:00
 #PBS -l mem=64GB
 #PBS -l ncpus=1
 #PBS -j oe

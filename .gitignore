@@ -1,5 +1,6 @@
 *.o
 awap_to_netcdf.dSYM/*
+*.pdf
 *.mod
 *.txt
 *.sh.o*
