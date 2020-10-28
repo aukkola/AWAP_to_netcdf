@@ -170,7 +170,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph09
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph09_hpa_day/bom_awap_climatology_vpd09_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+        '/awap_vph09_hpa_day/bom_awap_climatology_vph09_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph09.txt'
       ok = systemqq(commandline)
@@ -182,7 +182,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph15
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph15_hpa_day/bom_awap_climatology_vpd15_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+        '/awap_vph15_hpa_day/bom_awap_climatology_vph15_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph15.txt'
       ok = systemqq(commandline)
