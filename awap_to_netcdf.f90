@@ -82,7 +82,7 @@ PROGRAM awap_to_netcdf
 
     CALL inout_path(filename, path_in, path_out)
 
-    rain_path    = TRIM(filename%path_in)//"/pr/" ! MMY
+    rain_path    = TRIM(filename%path_in)//"/pr/" ! ANNA
     ! MMY : rain_path must be the used folder, since the number of files is accounted by this folder
 
     CALL cable_bios_init(WG, dels, CurYear, kend, ktauday, rain_path, filename)

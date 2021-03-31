@@ -97,7 +97,8 @@ MODULE cable_bios_met_obs_params
       ALLOCATE ( filename%vph15_file(file_num)   )
 
     ! read in header
-      hdr_file = "/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/CNRM-CERFACS-CNRM-CM5/historical/CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP/pr/pr_19700101_19700101.hdr" ! MMY
+      hdr_file = "/g/data/w35/amu561/Steven_CABLE_runs/AWAP_to_netcdf/awra.hdr"
+!"/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/CNRM-CERFACS-CNRM-CM5/historical/CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP/pr/pr_19700101_19700101.hdr" ! MMY
       CALL GET_UNIT(iunit)
       CALL ReadArcFltHeader( iunit, hdr_file,    &
                              MaskCols, MaskRows, & ! Landmask col and row dimensions
