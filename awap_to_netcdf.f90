@@ -23,7 +23,11 @@ PROGRAM awap_to_netcdf
     INTEGER     :: CurYear, YearStart, YearEnd ! MMY
     INTEGER     :: LOY
     CHARACTER(4):: CurYear_CHAR
-    CHARACTER(500), INTENT(IN) :: experiment
+    CHARACTER(500) :: model
+    CHARACTER(500) :: experiment
+    CHARACTER(500) :: bc_method
+    CHARACTER(500) :: path_in
+    CHARACTER(500) :: path_out
     REAL(sp),DIMENSION(:),ALLOCATABLE :: data_temp
     INTEGER(i4b)                      :: iunit
 
@@ -42,26 +46,41 @@ PROGRAM awap_to_netcdf
 
 ! ************ 1. Initialise variable, arrays to store things, etc *************
 
+    !ANNA: change here
+    model      = "CNRM-CERFACS-CNRM-CM5"
+    experiment = "historical"
+    bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
+
+    path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
+    path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
+
+
     dels      = 10800.  ! It should be 3 hours = 3600*3. dels is time step size
                         ! in seconds given by bios.nml
     kstart    = 1
     ktauday   = INT(24.0*3600.0/dels) ! ktauday = 8
 
 
-    if (experiment .eq. "historical" ); then
+    if (TRIM(experiment)== "historical" ) then
       YearStart = 1960
       YearEnd   = 2005
-    elseif (experiment .eq. "rcp85" .or. experiment .eq. "rcp45"); then
+    elseif (TRIM(experiment) == "rcp85" .or. TRIM(experiment) == "rcp45") then
       YearStart = 2006
       YearEnd   = 2099
     endif
+
+    print *, "Experiment: ", experiment
+    print *, "Start year: ", YearStart
+    print *, "End year: ", YearEnd
 
 
     !YearStart = 1969 ! MMY
     !YearEnd   = 1969 ! MMY
     CurYear   = YearStart
 
-    CALL inout_path(filename)
+    CALL inout_path(filename, path_in, path_out)
 
     rain_path    = TRIM(filename%path_in)//"/pr/" ! MMY
     ! MMY : rain_path must be the used folder, since the number of files is accounted by this folder

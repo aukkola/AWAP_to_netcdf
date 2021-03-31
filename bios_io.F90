@@ -7,10 +7,11 @@ MODULE bios_io_mod !    MMY
     USE IFPORT  ! To use systemqq, the module is needed.
     USE type_def_mod, ONLY: i4b, sp, FILE_NAME
 
+
   CONTAINS
 
 ! ======================= From MGK and modified by MMY =========================
-  SUBROUTINE inout_path(filename)
+  SUBROUTINE inout_path(filename, path_in, path_out)
 
       IMPLICIT NONE
 
@@ -19,8 +20,7 @@ MODULE bios_io_mod !    MMY
       CHARACTER(LEN = 200) :: arg
       TYPE(FILE_NAME)      :: filename
       CHARACTER(500)       :: model
-      CHARACTER(500), INTENT(OUT) :: experiment
-      CHARACTER(500)       :: bc_method
+      CHARACTER(500), INTENT(IN) :: path_in, path_out
 
 
 
@@ -43,14 +43,14 @@ MODULE bios_io_mod !    MMY
 
       ELSE
          !ANNA: change here
-         model      = "CNRM-CERFACS-CNRM-CM5"
-         experiment = "historical"
-         bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
+         !model      = "CNRM-CERFACS-CNRM-CM5"
+         !experiment = "historical"
+         !bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
 
-         filename%path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
-         filename%path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
+         filename%path_in  = path_in !("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
+                             !//TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
+         filename%path_out = path_out !("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
+                             !//TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
 
          print *, "in: ", filename%path_in
          print *, "out: ", filename%path_out
