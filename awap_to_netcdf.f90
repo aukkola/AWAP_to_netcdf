@@ -51,7 +51,7 @@ PROGRAM awap_to_netcdf
     experiment = "historical"
     bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
 
-    path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
+    path_in  = ("/scratch/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
                              //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
     path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
                              //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
