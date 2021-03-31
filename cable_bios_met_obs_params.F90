@@ -245,9 +245,9 @@ MODULE cable_bios_met_obs_params
           !ANNA: unit conversions
 
           !Rain from mm/s to mm/day
-          print *, "rain_day#1", rain_day(1)
+          print *, "rain_day#1", rain_day
           rain_day = rain_day * SecDay
-          print *, "rain_day #2", rain_day(1)
+          print *, "rain_day #2", rain_day
 
           !Tmin and Tmax from K to C
           tairmax_day = tairmax_day - 273.15
