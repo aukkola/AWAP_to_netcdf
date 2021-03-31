@@ -19,7 +19,7 @@ MODULE bios_io_mod !    MMY
       CHARACTER(LEN = 200) :: arg
       TYPE(FILE_NAME)      :: filename
       CHARACTER(500)       :: model
-      CHARACTER(500)       :: experiment
+      CHARACTER(500), INTENT(OUT) :: experiment
       CHARACTER(500)       :: bc_method
 
 
@@ -67,28 +67,28 @@ MODULE bios_io_mod !    MMY
       !vpd 3pm (hPa)
 
       ! create output data file folders
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/Rainf'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Rainf'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/Snowf'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Snowf'
       ok = systemqq(commandline)
 
       !commandline = 'mkdir '//TRIM(filename%path_out)//'/LWdown'
       !ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/SWdown'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/SWdown'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/Tair'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Tair'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/Wind'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Wind'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/Qair'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Qair'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/PSurf'
+      commandline = 'mkdir -p '//TRIM(filename%path_out)//'/PSurf'
       ok = systemqq(commandline)
 
       PRINT *,"POINT 1 Reading input and output paths"
