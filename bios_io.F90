@@ -47,22 +47,22 @@ MODULE bios_io_mod !    MMY
          experiment = "historical"
          bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
 
-         filename%path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/"\ !base path
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//) !model/experiment options
-         filename%path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/"\
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//)
+         filename%path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
+         filename%path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
 
-         print *, "in: ", filename$path_in
-         print *, "out: ", filename$path_out
+         print *, "in: ", filename%path_in
+         print *, "out: ", filename%path_out
 
       END IF
 
       !ANNA: required inputs and units
-      !precip (xx)
-      !swdown (MJ/day)
+      !precip (mm/s, converted to mm/day)
+      !swdown (W m-a, converted to MJ/day)
       !wind (m/s)
-      !tmax (K)
-      !tmin (K)
+      !tmax (K, converted to C)
+      !tmin (K, converted to C)
       !vpd 9am (hPa)
       !vpd 3pm (hPa)
 

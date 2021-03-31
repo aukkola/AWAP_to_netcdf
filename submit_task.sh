@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -m ae
-#PBS -P w35
+#PBS -P oq98
 #PBS -q normal
 #PBS -l walltime=2:00:00
 #PBS -l mem=64GB
@@ -9,6 +9,6 @@
 #PBS -j oe
 #PBS -l wd
 #PBS -l storage=gdata/w35+gdata/wd9
-#PBS -M mengyuan.mu@unsw.edu.au
+#PBS -M a.ukkola@unsw.edu.au@unsw.edu.au
 
 ./awap_to_netcdf
