@@ -18,6 +18,10 @@ MODULE bios_io_mod !    MMY
       CHARACTER(500)       :: commandline
       CHARACTER(LEN = 200) :: arg
       TYPE(FILE_NAME)      :: filename
+      CHARACTER(500)       :: model
+      CHARACTER(500)       :: experiment
+      CHARACTER(500)       :: bc_method
+
 
 
       IF ( IARGC() > 0 ) THEN
@@ -38,11 +42,29 @@ MODULE bios_io_mod !    MMY
          ENDIF
 
       ELSE
+         !ANNA: change here
+         model      = "CNRM-CERFACS-CNRM-CM5"
+         experiment = "historical"
+         bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
 
-         filename%path_in  = "/g/data/w35/Shared_data/AWAP_raw_data" ! MMY
-         filename%path_out = "/g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf" ! MMY
+         filename%path_in  = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/"\ !base path
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//) !model/experiment options
+         filename%path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/"\
+                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//)
+
+         print *, "in: ", filename$path_in
+         print *, "out: ", filename$path_out
 
       END IF
+
+      !ANNA: required inputs and units
+      !precip (xx)
+      !swdown (MJ/day)
+      !wind (m/s)
+      !tmax (K)
+      !tmin (K)
+      !vpd 9am (hPa)
+      !vpd 3pm (hPa)
 
       ! create output data file folders
       commandline = 'mkdir '//TRIM(filename%path_out)//'/Rainf'
@@ -51,8 +73,8 @@ MODULE bios_io_mod !    MMY
       commandline = 'mkdir '//TRIM(filename%path_out)//'/Snowf'
       ok = systemqq(commandline)
 
-      commandline = 'mkdir '//TRIM(filename%path_out)//'/LWdown'
-      ok = systemqq(commandline)
+      !commandline = 'mkdir '//TRIM(filename%path_out)//'/LWdown'
+      !ok = systemqq(commandline)
 
       commandline = 'mkdir '//TRIM(filename%path_out)//'/SWdown'
       ok = systemqq(commandline)
@@ -107,10 +129,10 @@ MODULE bios_io_mod !    MMY
       CLOSE(iunit)
       !ok = systemqq('rm ./filenum.txt')
 
-   ! READING MET DATA
+      ! READING MET DATA
       ! rain
       commandline = 'find '//TRIM(filename%path_in)//\
-          '/awap_rain_mm_day/bom_awap_climatology_rain_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+          '/pr/ -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_rain.txt'
       ok = systemqq(commandline)
@@ -122,7 +144,7 @@ MODULE bios_io_mod !    MMY
 
       ! rad
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_rad_MJ_day/bom_awap_climatology_rad_1990-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+           '/rsds/ -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_rad.txt'
       ok = systemqq(commandline)
@@ -134,7 +156,7 @@ MODULE bios_io_mod !    MMY
 
       ! wind
       commandline = 'find '//TRIM(filename%path_in)//\
-      '/mcvicar_windspeed_ms_day/mcvicar_climatology_windspeed_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+      '/sfcWind/ -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_wind.txt'
       ok = systemqq(commandline)
@@ -146,7 +168,7 @@ MODULE bios_io_mod !    MMY
 
       ! tmax
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_tmax_C_day/bom_awap_climatology_tmax_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+           '/tasmax/ -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_tmax.txt'
       ok = systemqq(commandline)
@@ -158,7 +180,7 @@ MODULE bios_io_mod !    MMY
 
       ! tmin
       commandline = 'find '//TRIM(filename%path_in)//\
-           '/awap_tmin_C_day/bom_awap_climatology_tmin_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+           '/tasmin/ -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_tmin.txt'
       ok = systemqq(commandline)
@@ -170,7 +192,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph09
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph09_hpa_day/bom_awap_climatology_vph09_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+        '/vpd_09 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph09.txt'
       ok = systemqq(commandline)
@@ -182,7 +204,7 @@ MODULE bios_io_mod !    MMY
 
       ! vph15
       commandline = 'find '//TRIM(filename%path_in)//\
-        '/awap_vph15_hpa_day/bom_awap_climatology_vph15_1970-1999 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+        '/vpd_15 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
       ok = systemqq(commandline)
       commandline = 'sort -n <./temp.txt >./namelist_vph15.txt'
       ok = systemqq(commandline)

@@ -67,7 +67,8 @@ PROGRAM awap_to_netcdf
 
     CALL inout_path(filename)
 
-    rain_path    = TRIM(filename%path_in)//"/awap_rain_mm_day_2000-2017"
+    !ANNA
+    rain_path    = TRIM(filename%path_in)//"/pr/"
 
     CALL cable_bios_init(WG, dels, CurYear, kend, ktauday, rain_path, filename)
        ! INCLUDING:
@@ -151,22 +152,22 @@ PROGRAM awap_to_netcdf
 
         CALL GET_UNIT(iunit_rain)
         OPEN (iunit_rain, file="rain.txt",action="write")
-        
+
         CALL GET_UNIT(iunit_snow)
         OPEN (iunit_snow, file="snow.txt",action="write")
-        
-        CALL GET_UNIT(iunit_lwdown)
-        OPEN (iunit_lwdown, file="lwdown.txt",action="write")
-        
+
+        !CALL GET_UNIT(iunit_lwdown)
+        !OPEN (iunit_lwdown, file="lwdown.txt",action="write")
+
         CALL GET_UNIT(iunit_swdown)
         OPEN (iunit_swdown, file="swdown.txt",action="write")
-        
+
         CALL GET_UNIT(iunit_tair)
         OPEN (iunit_tair, file="tair.txt",action="write")
-        
+
         CALL GET_UNIT(iunit_wind)
         OPEN (iunit_wind, file="wind.txt",action="write")
-        
+
         CALL GET_UNIT(iunit_qair)
         OPEN (iunit_qair, file="qair.txt",action="write")
 
@@ -205,8 +206,8 @@ PROGRAM awap_to_netcdf
 !          CALL write_output(filename, data_temp, dels, CurYear, ktau, kend, &
 !                            .FALSE., ncid_snow, snowID, snowtID)
 
-          data_temp = WG%PhiLd
-          WRITE (iunit_lwdown, '(F20.10)'), data_temp(335859)
+          !data_temp = WG%PhiLd
+          !WRITE (iunit_lwdown, '(F20.10)'), data_temp(335859)
 !          CALL write_output(filename, data_temp, dels, CurYear, ktau, kend, &
 !                            .TRUE., ncid_lw  , lwID  , lwtID  )
 
@@ -242,13 +243,13 @@ PROGRAM awap_to_netcdf
 
        CLOSE(iunit_rain)
        CLOSE(iunit_snow)
-       CLOSE(iunit_lwdown)
+       !CLOSE(iunit_lwdown)
        CLOSE(iunit_swdown)
        CLOSE(iunit_tair)
        CLOSE(iunit_wind)
        CLOSE(iunit_qair)
        CLOSE(iunit_psurf)
-       
+
 !       ok = NF90_CLOSE(ncid_rain)
 !       ok = NF90_CLOSE(ncid_snow)
 !       ok = NF90_CLOSE(ncid_lw  )
