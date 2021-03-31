@@ -284,6 +284,20 @@ MODULE cable_bios_met_obs_params
              WG%VapPPa1500Prev = vph_1500
           END IF
     !**************************************
+          !ANNA: unit conversions
+
+          !Rain from mm/s to mm/day
+          rain_day = rain_day * 86400.
+
+          !Tmin and Tmax from K to C
+          tairmax_day = tairmax_day - 273.15
+          tairmin_day = tairmin_day - 273.15
+
+          !SWdown from W m-2 to MJ/day
+          swdown_day = swdown_day * 86400. / 10.**6
+
+    !**************************************
+
 
           WG%TempMinDayNext = next_tairmin_day
           WG%VapPPa0900Next = next_vph_0900
