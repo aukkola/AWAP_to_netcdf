@@ -9,6 +9,6 @@
 #PBS -j oe
 #PBS -l wd
 #PBS -l storage=gdata/w35+gdata/wd9
-#PBS -M a.ukkola@unsw.edu.au@unsw.edu.au
+#PBS -M a.ukkola@unsw.edu.au
 
 ./awap_to_netcdf
