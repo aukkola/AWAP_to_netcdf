@@ -52,10 +52,11 @@ MODULE bios_io_mod !    MMY
          filename%path_out = path_out !("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
                              !//TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
 
-         print *, "in: ", filename%path_in
-         print *, "out: ", filename%path_out
-
       END IF
+
+      print *, "in: ", filename%path_in
+      print *, "out: ", filename%path_out
+
 
       !ANNA: required inputs and units
       !precip (mm/s, converted to mm/day)
