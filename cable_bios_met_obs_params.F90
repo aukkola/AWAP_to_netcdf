@@ -241,9 +241,26 @@ MODULE cable_bios_met_obs_params
           READ (vph15_unit) vph_1500
           CLOSE(vph15_unit)
 
+    !**************************************
+          !ANNA: unit conversions
+
+          !Rain from mm/s to mm/day
+          print *, "rain_day#1", rain_day(1)
+          rain_day = rain_day * SecDay
+          print *, "rain_day #2", rain_day(1)
+
+          !Tmin and Tmax from K to C
+          tairmax_day = tairmax_day - 273.15
+          tairmin_day = tairmin_day - 273.15
+
+          !SWdown from W m-2 to MJ/day
+          swdown_day = swdown_day * SecDay / 10.**6
+
+    !**************************************
 
           WG%TempMaxDayPrev = WG%TempMaxDay
           WG%VapPPa1500Prev = WG%VapPPa1500
+
 
     !**************** MMY *****************
           IF (ktau /= kend .and. CurYear /= YearEnd) THEN
@@ -271,6 +288,7 @@ MODULE cable_bios_met_obs_params
 
           END IF
 
+
     !***************************************
 
           WG%WindDay        = wind_day !MMY, from McVicar dataset
@@ -284,20 +302,6 @@ MODULE cable_bios_met_obs_params
              WG%TempMaxDayPrev = tairmax_day
              WG%VapPPa1500Prev = vph_1500
           END IF
-    !**************************************
-          !ANNA: unit conversions
-
-          !Rain from mm/s to mm/day
-          print *, "rain_day#1", rain_day(1)
-          rain_day = rain_day * SecDay
-          print *, "rain_day #2", rain_day(1)
-
-          !Tmin and Tmax from K to C
-          tairmax_day = tairmax_day - 273.15
-          tairmin_day = tairmin_day - 273.15
-
-          !SWdown from W m-2 to MJ/day
-          swdown_day = swdown_day * SecDay / 10.**6
 
     !**************************************
 
