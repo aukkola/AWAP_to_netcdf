@@ -148,10 +148,10 @@ PROGRAM awap_to_netcdf
                               "snowfall_flux",                         &
                               "Snowf","kg m-2 s-1")
 
-       ! CALL create_output_file(LWdown_name, "LWdown",                  &
-       !                         "Downward Longwave Radiation",          &
-       !                         "surface_downwelling_longwave_flux_in_air", &
-       !                         "LWdown","W m-2")
+       CALL create_output_file(LWdown_name, "LWdown",                  &
+                               "Downward Longwave Radiation",          &
+                               "surface_downwelling_longwave_flux_in_air", &
+                               "LWdown","W m-2")
 
        CALL create_output_file(SWdown_name, "SWdown",                  &
                               "Downward Shortwave Radiation",          &
@@ -198,9 +198,9 @@ PROGRAM awap_to_netcdf
           CALL write_output(filename, Snow_name, "Snowf", data_temp, dels,   &
                             CurYear, ktau, kend, .FALSE.)
 
-          ! data_temp = WG%PhiLd
-          ! CALL write_output(filename, LWdown_name, "LWdown", data_temp, dels,&
-          !                   CurYear, ktau, kend, .TRUE. )
+          data_temp = WG%PhiLd
+          CALL write_output(filename, LWdown_name, "LWdown", data_temp, dels,&
+                            CurYear, ktau, kend, .TRUE. )
 
           data_temp = WG%PhiSd
           CALL write_output(filename, SWdown_name, "SWdown", data_temp, dels,&

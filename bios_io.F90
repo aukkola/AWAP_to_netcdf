@@ -74,8 +74,8 @@ MODULE bios_io_mod !    MMY
       commandline = 'mkdir -p '//TRIM(filename%path_out)//'/Snowf'
       ok = systemqq(commandline)
 
-      !commandline = 'mkdir '//TRIM(filename%path_out)//'/LWdown'
-      !ok = systemqq(commandline)
+      commandline = 'mkdir '//TRIM(filename%path_out)//'/LWdown'
+      ok = systemqq(commandline)
 
       commandline = 'mkdir -p '//TRIM(filename%path_out)//'/SWdown'
       ok = systemqq(commandline)

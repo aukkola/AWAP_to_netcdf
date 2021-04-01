@@ -292,6 +292,10 @@ CONTAINS
       REAL(sp) :: ritime    ! Real version of current time
       REAL(sp),DIMENSION(np):: PhiLd_Swinbank     ! down longwave irradiance  [W/m2]
 
+      !LWdown calculation
+      REAL(sp), DIMENSION(np) :: swdown 
+      REAL(sp), DIMENSION(np) :: vap_pressure
+
 !-------------------------------------------------------------------------------
 
       ritime = REAL(itime)     * WG%delT/3600.  ! Convert the current time to real
@@ -303,12 +307,14 @@ CONTAINS
       TimeRad  = 2.0*Pi*TimeNoon       ! Time in day frac (-Pi to Pi, zero at noon)
       WHERE (ritime >= WG%TimeSunrise .AND. ritime <= WG%TimeSunset&
             .AND.WG%SolarNorm.gt.1.e-3  ) ! Sun is up
+            
           WG%PhiSd = MAX((WG%SolarMJDay/WG%SolarNorm)  &   ! PhiSd [MJ/m2/day]
              * ( SIN(WG%DecRad)*SIN(WG%LatRad) + COS(WG%DecRad)*COS(WG%LatRad) &
              * COS(TimeRad) ), 0.0)  ! fix to avoid negative PhiSD vh 13/05/08
                                      ! Paltridge and Platt eq [3.4]
           WG%coszen = ( SIN(WG%DecRad)*SIN(WG%LatRad) +&
               COS(WG%DecRad)*COS(WG%LatRad)*COS(TimeRad) )
+              
       ELSEWHERE ! sun is down
           WG%PhiSd  = 0.0
           WG%coszen = 0.0
@@ -410,22 +416,37 @@ CONTAINS
 ! -------------------------------
 ! Alternate longwave formulation ! LWdown/GSWP3.BC.LWdown.3hrMap
 ! ----------------------------
-      WG%PhiLd = epsilon * SBoltz * WG%Temp**4       ! [W/m2] (Brutsaert)
 
-      WHERE (WG%PhiSd.GT.50.0)
-          adjust_fac = ((1.17)**(WG%SolarNorm))/1.17
-      ELSEWHERE
-          adjust_fac = 0.9
-      ENDWHERE
+      swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
 
-      WG%PhiLd = WG%PhiLd /adjust_fac * (1.0 + WG%PhiSd/8000.)
-                ! adjustment (formulation from Gab Abramowitz)
+      !Actual vapour pressure
+      vap_pressure = 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
 
-      WHERE ((WG%PhiLd.GT.500.00).OR.(WG%PhiLd.LT.100.00))
-          WG%PhiLd = PhiLd_Swinbank
-      ENDWHERE
 
-      IF (ANY((WG%PhiLd.GT.750.00).OR.(WG%PhiLd.LT.100.00))) THEN
+      !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
+      !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
+      !                                (1.35 * (swdown / swdown_clear) - 0.35))
+      
+      WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(vap_pressure / WG%Temp)**(0.14)) &
+                  * (1.35 * (swdown / WG%SolarNorm) - 0.35))
+ 
+
+      ! WG%PhiLd = epsilon * SBoltz * WG%Temp**4       ! [W/m2] (Brutsaert)
+      ! 
+      ! WHERE (WG%PhiSd.GT.50.0)
+      !     adjust_fac = ((1.17)**(WG%SolarNorm))/1.17
+      ! ELSEWHERE
+      !     adjust_fac = 0.9
+      ! ENDWHERE
+      ! 
+      ! WG%PhiLd = WG%PhiLd /adjust_fac * (1.0 + WG%PhiSd/8000.)
+      !           ! adjustment (formulation from Gab Abramowitz)
+      ! 
+      ! WHERE ((WG%PhiLd.GT.500.00).OR.(WG%PhiLd.LT.100.00))
+      !     WG%PhiLd = PhiLd_Swinbank
+      ! ENDWHERE
+»
+      IF (ANY((WG%PhiLd.GT.950.00).OR.(WG%PhiLd.LT.0.00))) THEN
           write(*,*) 'PhiLD out of range'
       ENDIF
 
