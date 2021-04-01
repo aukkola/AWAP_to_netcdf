@@ -245,16 +245,36 @@ MODULE cable_bios_met_obs_params
           !ANNA: unit conversions
 
           !Rain from mm/s to mm/day
-          print *, "rain_day#1", rain_day
+          print *, "rain_day before", rain_day(1005)
+          
           rain_day = rain_day * SecDay
-          print *, "rain_day #2", rain_day
+          
+          print *, "rain_day after", rain_day(1005)
+
 
           !Tmin and Tmax from K to C
+          print *, "tmax before", tairmax_day(1005)
+          print *, "tmin before", tairmin_day(1005)
+          
           tairmax_day = tairmax_day - 273.15
           tairmin_day = tairmin_day - 273.15
 
-          !SWdown from W m-2 to MJ/day
+          print *, "tmax after", tairmax_day(1005)
+          print *, "tmin after", tairmin_day(1005)
+      
+          !SWdown from W m-2 to MJ/day     
+          print *, "swdown before", swdown_day(1005)
+      
           swdown_day = swdown_day * SecDay / 10.**6
+          
+          print *, "swdown after", swdown_day(1005)
+
+
+          !VPD sanity check
+
+          print *, "VPD 9:00", vph_0900(1005)
+          print *, "VPD 15:00", vph_1500(1005)
+
 
     !**************************************
 

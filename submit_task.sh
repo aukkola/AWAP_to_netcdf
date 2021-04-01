@@ -3,7 +3,7 @@
 #PBS -m ae
 #PBS -P oq98
 #PBS -q express
-#PBS -l walltime=00:15:00
+#PBS -l walltime=00:1:00
 #PBS -l mem=6GB
 #PBS -l ncpus=1
 #PBS -j oe
