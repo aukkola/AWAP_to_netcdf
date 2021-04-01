@@ -59,6 +59,14 @@ PROGRAM awap_to_netcdf
     CALL GET_COMMAND_ARGUMENT(5,path_out)
 
 
+    print *, "#--------- Weather generator inputs ---------#"
+    print *, "model: ", model
+    print *, "experiment: ", experiment
+    print *, "bc method: ", bc_method
+    print *, "input path: ", path_in
+    print *, "output path: ", path_out
+
+
     !ANNA: change here
     !model      = "CNRM-CERFACS-CNRM-CM5"
     !experiment = "historical"
@@ -68,6 +76,9 @@ PROGRAM awap_to_netcdf
                 //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
     path_out = (TRIM(path_out)//"/" &  !"/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
                 //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
+
+print *, "pathin", path_in
+print *, "pathout", path_out
 
 
     dels      = 10800.  ! It should be 3 hours = 3600*3. dels is time step size
