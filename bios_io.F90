@@ -19,44 +19,35 @@ MODULE bios_io_mod !    MMY
       CHARACTER(500)       :: commandline
       CHARACTER(LEN = 200) :: arg
       TYPE(FILE_NAME)      :: filename
-      CHARACTER(500)       :: model
       CHARACTER(500), INTENT(IN) :: path_in, path_out
 
 
-
-      IF ( IARGC() > 0 ) THEN
-
-         CALL GETARG(1, arg)
-         !   ??? arg(1:2)
-         IF (arg(1:2) == '-u' .OR. arg(1:2) == '-h') THEN
-            WRITE (*, *) '================== USAGE =================='
-            WRITE (*, *) 'e.g...             '
-            WRITE (*, *) '                   '
-            WRITE (*, *) 'Makefile /g/data/w35/mm3972/data/AWAP/meta_data &
-                          /g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf'
-            WRITE (*, *) '                                           '
-            STOP
-         ELSE
-            CALL GETARG(1, filename%path_in)
-            CALL GETARG(2, filename%path_out)
-         ENDIF
-
-      ELSE
-         !ANNA: change here
-         !model      = "CNRM-CERFACS-CNRM-CM5"
-         !experiment = "historical"
-         !bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
+      ! 
+      ! IF ( IARGC() > 0 ) THEN
+      ! 
+      !    CALL GETARG(1, arg)
+      !    !   ??? arg(1:2)
+      !    IF (arg(1:2) == '-u' .OR. arg(1:2) == '-h') THEN
+      !       WRITE (*, *) '================== USAGE =================='
+      !       WRITE (*, *) 'e.g...             '
+      !       WRITE (*, *) '                   '
+      !       WRITE (*, *) 'Makefile /g/data/w35/mm3972/data/AWAP/meta_data &
+      !                     /g/data/w35/mm3972/data/AWAP/AWAP_to_netcdf'
+      !       WRITE (*, *) '                                           '
+      !       STOP
+      !    ELSE
+      !       CALL GETARG(1, filename%path_in)
+      !       CALL GETARG(2, filename%path_out)
+      !    ENDIF
+      ! 
+      ! ELSE
 
          filename%path_in  = path_in !("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
                              !//TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
          filename%path_out = path_out !("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
                              !//TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
 
-      END IF
-
-      print *, "in: ", filename%path_in
-      print *, "out: ", filename%path_out
-
+      !END IF
 
       !ANNA: required inputs and units
       !precip (mm/s, converted to mm/day)

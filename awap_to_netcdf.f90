@@ -95,7 +95,6 @@ print *, "pathout", path_out
       YearEnd   = 2099
     endif
 
-    print *, "Experiment: ", experiment
     print *, "Start year: ", YearStart
     print *, "End year: ", YearEnd
 
