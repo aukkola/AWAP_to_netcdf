@@ -46,15 +46,28 @@ PROGRAM awap_to_netcdf
 
 ! ************ 1. Initialise variable, arrays to store things, etc *************
 
-    !ANNA: change here
-    model      = "CNRM-CERFACS-CNRM-CM5"
-    experiment = "historical"
-    bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
+    !First, make sure the right number of inputs have been provided
+    IF(COMMAND_ARGUMENT_COUNT().NE.5)THEN
+      WRITE(*,*)'ERROR, FIVE COMMAND-LINE ARGUMENTS REQUIRED, STOPPING'
+      STOP
+    ENDIF
+    
+    CALL GET_COMMAND_ARGUMENT(1,model)   !read in the five values
+    CALL GET_COMMAND_ARGUMENT(2,experiment)
+    CALL GET_COMMAND_ARGUMENT(3,bc_method)
+    CALL GET_COMMAND_ARGUMENT(4,path_in)
+    CALL GET_COMMAND_ARGUMENT(5,path_out)
 
-    path_in  = ("/scratch/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
-    path_out = ("/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
-                             //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
+
+    !ANNA: change here
+    !model      = "CNRM-CERFACS-CNRM-CM5"
+    !experiment = "historical"
+    !bc_method  = "CSIRO-CCAM-r3355-r240x120-ISIMIP2b-AWAP"
+
+    path_in  = (//TRIM(path_in)//"/" & ! ("/scratch/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_inputs/" & !base path
+                //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/") !model/experiment options
+    path_out = (//TRIM(path_out)//"/" &  !"/g/data/w35/amu561/Steven_CABLE_runs/CABLE_inputs/Weather_generator_outputs/" &
+                //TRIM(model)//"/"//TRIM(experiment)//"/"//TRIM(bc_method)//"/")
 
 
     dels      = 10800.  ! It should be 3 hours = 3600*3. dels is time step size
