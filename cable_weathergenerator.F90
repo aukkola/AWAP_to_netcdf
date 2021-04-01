@@ -445,7 +445,7 @@ CONTAINS
       ! WHERE ((WG%PhiLd.GT.500.00).OR.(WG%PhiLd.LT.100.00))
       !     WG%PhiLd = PhiLd_Swinbank
       ! ENDWHERE
-»
+      
       IF (ANY((WG%PhiLd.GT.950.00).OR.(WG%PhiLd.LT.0.00))) THEN
           write(*,*) 'PhiLD out of range'
       ENDIF
