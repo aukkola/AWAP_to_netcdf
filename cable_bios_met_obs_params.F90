@@ -317,8 +317,8 @@ MODULE cable_bios_met_obs_params
           WG%VapPPa0900     = vph_0900
           WG%VapPPa1500     = vph_1500
 
-print *, "TempMaxDay in cable_bios", WG%TempMaxDay
-print *, "TempMinDay in cable_bios", WG%TempMinDay
+print *, "TempMaxDay in cable_bios", WG%TempMaxDay(1005)
+print *, "TempMinDay in cable_bios", WG%TempMinDay(1005)
 
 
     !**************** MMY *****************
