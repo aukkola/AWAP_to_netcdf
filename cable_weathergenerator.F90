@@ -305,6 +305,10 @@ CONTAINS
       ritime = REAL(itime)     * WG%delT/3600.  ! Convert the current time to real
       rntime = REAL(WG%ndtime) * WG%delT/3600.  ! Convert ntime to real
 
+! -------------
+! SWdown
+! -------------
+    
       ! SWdown/GSWP3.BC.SWdown.3hrMap
       ! Instantaneous downward hemispheric solar irradiance PhiSd
       TimeNoon = ritime/rntime - 0.5   ! Time in day frac (-0.5 to 0.5, zero at noon)
@@ -325,6 +329,8 @@ CONTAINS
       END WHERE
 
       WG%PhiSd    = WG%PhiSd*1e6/SecDay   ! Convert PhiSd: [MJ/m2/day] to [W/m2]
+
+      print *, "SWDOWN ", WG%PhiSd(1005)
 
 ! -------------
 ! Precipitation
@@ -386,8 +392,8 @@ CONTAINS
 ! -----------------------------------
       !WG%VapPmb = WG%VapPmbDay
       WG%PPa    = WG%PPaDay * 100. ! PSurf/GSWP3.BC.PSurf.3hrMap, pressure 1 [mb] = 100 [Pa]
-      PRINT *,"WG%PPaDay(58888)",WG%PPaDay(1005) !!!!!
-      PRINT *,"WG%PPa(58888)",WG%PPa(1005)       !!!!!
+      PRINT *,"WG%PPaDay", WG%PPaDay(1005) !!!!!
+      PRINT *,"WG%PPa", WG%PPa(1005)       !!!!!
 
 ! ********************* MMY ************************
 
