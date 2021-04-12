@@ -236,8 +236,15 @@ CONTAINS
       END WHERE
       WG%TimeSunsetPrev  = WG%TimeSunset - 24.     ! * Ho-24h (a negative hour)
       TimeSunriseNext    = WG%TimeSunrise + 24.    ! Hp
+      
+      print *, "max temp in sunset", WG%TempMaxDay
+      print *, "min temp in sunset", WG%TempMinDayNext
+      
+      
       WG%TempSunset      = WG%TempMaxDay - &
                          (0.39 * (WG%TempMaxDay - WG%TempMinDayNext))  ! To
+                         
+      pprint *, "tempsunset in sunset", WG%TempSunset
       WG%TempSunsetPrev  = WG%TempMaxDayPrev - &
                          (0.39 * (WG%TempMaxDayPrev - WG%TempMinDay))  ! * To-24h
       WG%TempRangeDay    = WG%TempMaxDay - WG%TempMinDay               ! alpha = Tx-Tn
