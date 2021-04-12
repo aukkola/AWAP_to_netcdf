@@ -393,14 +393,14 @@ CONTAINS
 
     !Calculate saturated vapour pressure deficit (tmax in deg C)
     !Use mean temp for 9am and max temp for 3pm
-    tmean = (TempMinDay + TempMaxDay) / 2.
+    tmean = (WG%TempMinDay + WG%TempMaxDay) / 2.
     
     sat_pressure0900 <- 610.8 * exp((17.27 * tmean) / (237.3 + tmean))
-    sat_pressure1500 <- 610.8 * exp((17.27 * TempMaxDay) / (237.3 + TempMaxDay))
+    sat_pressure1500 <- 610.8 * exp((17.27 * WG%TempMaxDay) / (237.3 + WG%TempMaxDay))
 
     !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
     !Always calculate actual pressure from tmin
-    act_pressure <- 610.8 * exp((17.27 * TempMinDay) / (237.3 + TempMinDay))
+    act_pressure <- 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
     
     !Calculate VPD as sat - actual, and convert from Pa to hPa
     WG%VapPPa0900 =  (sat_pressure0900 - act_pressure) * 0.01
@@ -440,10 +440,9 @@ CONTAINS
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
 
-      IF (ritime >= 15. .AND. ritime < 16.) then
       print *, "swdown", swdown(58888)
       print *, "solarNorm", WG%SolarNorm(58888)
-      endif
+      
       
 
       !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
