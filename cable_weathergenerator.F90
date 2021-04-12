@@ -297,8 +297,8 @@ CONTAINS
       REAL(sp), DIMENSION(np) :: swdown 
 
       !Local, VPD calculation
-      REAL(sp) :: sat_pressure0900, sat_pressure1500
-      REAL(sp) :: act_pressure, tmean
+      REAL(sp), DIMENSION(np) :: sat_pressure0900, sat_pressure1500
+      REAL(sp), DIMENSION(np) :: act_pressure, tmean
 
 !-------------------------------------------------------------------------------
 
@@ -395,12 +395,12 @@ CONTAINS
     !Use mean temp for 9am and max temp for 3pm
     tmean = (WG%TempMinDay + WG%TempMaxDay) / 2.
     
-    sat_pressure0900 <- 610.8 * exp((17.27 * tmean) / (237.3 + tmean))
-    sat_pressure1500 <- 610.8 * exp((17.27 * WG%TempMaxDay) / (237.3 + WG%TempMaxDay))
+    sat_pressure0900 = 610.8 * exp((17.27 * tmean) / (237.3 + tmean))
+    sat_pressure1500 = 610.8 * exp((17.27 * WG%TempMaxDay) / (237.3 + WG%TempMaxDay))
 
     !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
     !Always calculate actual pressure from tmin
-    act_pressure <- 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
+    act_pressure = 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
     
     print *,  "actual pressure",  act_pressure
     print *,  "sat pressure 9am",  sat_pressure0900
