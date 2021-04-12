@@ -244,7 +244,7 @@ CONTAINS
       WG%TempSunset      = WG%TempMaxDay - &
                          (0.39 * (WG%TempMaxDay - WG%TempMinDayNext))  ! To
                          
-      pprint *, "tempsunset in sunset", WG%TempSunset
+      print *, "tempsunset in sunset", WG%TempSunset
       WG%TempSunsetPrev  = WG%TempMaxDayPrev - &
                          (0.39 * (WG%TempMaxDayPrev - WG%TempMinDay))  ! * To-24h
       WG%TempRangeDay    = WG%TempMaxDay - WG%TempMinDay               ! alpha = Tx-Tn
