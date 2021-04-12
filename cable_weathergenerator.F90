@@ -386,8 +386,8 @@ CONTAINS
 ! -----------------------------------
       !WG%VapPmb = WG%VapPmbDay
       WG%PPa    = WG%PPaDay * 100. ! PSurf/GSWP3.BC.PSurf.3hrMap, pressure 1 [mb] = 100 [Pa]
-      PRINT *,"WG%PPaDay(58888)",WG%PPaDay(58888) !!!!!
-      PRINT *,"WG%PPa(58888)",WG%PPa(58888)       !!!!!
+      PRINT *,"WG%PPaDay(58888)",WG%PPaDay(1005) !!!!!
+      PRINT *,"WG%PPa(58888)",WG%PPa(1005)       !!!!!
 
 ! ********************* MMY ************************
 
@@ -401,6 +401,11 @@ CONTAINS
     !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
     !Always calculate actual pressure from tmin
     act_pressure <- 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
+    
+    print *,  "actual pressure",  act_pressure
+    print *,  "sat pressure 9am",  sat_pressure0900
+    print *,  "sat pressure 3pm",  sat_pressure1500
+
     
     !Calculate VPD as sat - actual, and convert from Pa to hPa
     WG%VapPPa0900 =  (sat_pressure0900 - act_pressure) * 0.01
@@ -421,13 +426,13 @@ CONTAINS
                      (WG%VapPPa0900Next - WG%VapPPa1500) * (ritime - 15.)/18.
       END IF
       WG%VapPPa = WG%VapPPa * 100.
-      PRINT *,"WG%VapPPa(58888)",WG%VapPPa(58888) !!!!!
+      PRINT *,"WG%VapPPa(58888)",WG%VapPPa(1005) !!!!!
 
 ! -----------------------------------
 ! Specific Humidity from cable_bios_met_obs_params - MMY
 ! -----------------------------------
       WG%QV     = WG%VapPPa/WG%PPa*RMWbyRMA ! Qair/GSWP3.BC.Qair.3hrMap, specific humidity (kg/kg)
-      PRINT *,"WG%QV(58888)",WG%QV(58888) !!!!!
+      PRINT *,"WG%QV(58888)",WG%QV(1005) !!!!!
 
 ! ----------------------------
 ! Downward longwave irradiance
@@ -440,8 +445,8 @@ CONTAINS
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
 
-      print *, "swdown", swdown(58888)
-      print *, "solarNorm", WG%SolarNorm(58888)
+      print *, "swdown LW calculation", swdown(1005)
+      print *, "solarNorm LW calculation", WG%SolarNorm(1005)
       
       
 
