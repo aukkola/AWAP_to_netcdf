@@ -402,9 +402,9 @@ CONTAINS
     !Always calculate actual pressure from tmin
     act_pressure = 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
     
-    print *,  "actual pressure",  act_pressure
-    print *,  "sat pressure 9am",  sat_pressure0900
-    print *,  "sat pressure 3pm",  sat_pressure1500
+    print *,  "actual pressure",  act_pressure(1005)
+    print *,  "sat pressure 9am",  sat_pressure0900(1005)
+    print *,  "sat pressure 3pm",  sat_pressure1500(1005)
 
     
     !Calculate VPD as sat - actual, and convert from Pa to hPa
