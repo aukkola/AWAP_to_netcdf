@@ -157,6 +157,7 @@ CONTAINS
       REAL(sp),DIMENSION(np) :: TimeSunriseNext
       REAL(sp) :: RatioWindLiteDark
 
+
       ! -------------------------
       ! Downward solar irradiance
       ! -------------------------
@@ -294,7 +295,10 @@ CONTAINS
 
       !LWdown calculation
       REAL(sp), DIMENSION(np) :: swdown 
-      REAL(sp), DIMENSION(np) :: vap_pressure
+
+      !Local, VPD calculation
+      REAL(sp) :: sat_pressure0900, sat_pressure1500
+      REAL(sp) :: act_pressure, tmean
 
 !-------------------------------------------------------------------------------
 
@@ -386,6 +390,23 @@ CONTAINS
       PRINT *,"WG%PPa(58888)",WG%PPa(58888)       !!!!!
 
 ! ********************* MMY ************************
+
+    !Calculate saturated vapour pressure deficit (tmax in deg C)
+    !Use mean temp for 9am and max temp for 3pm
+    tmean = (TempMinDay + TempMaxDay) / 2.
+    
+    sat_pressure0900 <- 610.8 * exp((17.27 * tmean) / (237.3 + tmean))
+    sat_pressure1500 <- 610.8 * exp((17.27 * TempMaxDay) / (237.3 + TempMaxDay))
+
+    !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
+    !Always calculate actual pressure from tmin
+    act_pressure <- 610.8 * exp((17.27 * TempMinDay) / (237.3 + TempMinDay))
+    
+    !Calculate VPD as sat - actual, and convert from Pa to hPa
+    WG%VapPPa0900 =  (sat_pressure0900 - act_pressure) * 0.01
+    WG%VapPPa1500 =  (sat_pressure1500 - act_pressure) * 0.01
+
+
       IF (ritime <= 9.) THEN
    ! before 9am
           WG%VapPPa = WG%VapPPa1500Prev +  &
@@ -419,15 +440,11 @@ CONTAINS
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
 
-      !Actual vapour pressure
-      vap_pressure = 610.8 * exp((17.27 * WG%TempMinDay) / (237.3 + WG%TempMinDay))
-
-
       !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
       !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
       !                                (1.35 * (swdown / swdown_clear) - 0.35))
       
-      WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(vap_pressure / WG%Temp)**(0.14)) &
+      WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
                   * (1.35 * (swdown / WG%SolarNorm) - 0.35))
  
 
