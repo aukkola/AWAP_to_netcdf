@@ -440,6 +440,12 @@ CONTAINS
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
 
+      IF (ritime >= 15. .AND. ritime < 16.) then
+      print *, "swdown", swdown(58888)
+      print *, "solarNorm", WG%SolarNorm(58888)
+      endif
+      
+
       !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
       !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
       !                                (1.35 * (swdown / swdown_clear) - 0.35))
