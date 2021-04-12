@@ -387,6 +387,10 @@ CONTAINS
       END WHERE
       WG%Temp = WG%Temp + 273.16 ! MMY, unit C->K
 
+      PRINT *,"WG%Temp", WG%Temp(1005) !!!!!
+      PRINT *,"TempSunset", TempSunset(1005) !!!!!
+      PRINT *,"WG%TempNightRate", WG%TempNightRate(1005) !!!!!
+
 ! -----------------------------------
 ! Water Vapour Pressure, Air Pressure
 ! -----------------------------------
