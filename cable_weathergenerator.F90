@@ -463,7 +463,8 @@ CONTAINS
 ! ----------------------------
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
-
+      clearsky_swdown = clearsky_swdown * SecDay / 1e6 !Wm-2 to MJ/day
+      
       print *, "swdown LW calculation", swdown(1005)
       print *, "solarNorm LW calculation", WG%SolarNorm(1005)
       print *, "sboltz", SBoltz
@@ -478,8 +479,8 @@ CONTAINS
       !                                (1.35 * (swdown / swdown_clear) - 0.35))
       
       WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
-                  !* (1.35 * (swdown / max(clearsky_swdown, 0.000001)) - 0.35))
-                  * (1.35 * (swdown / max(swdown, 0.000001)) - 0.35))
+                  * (1.35 * (swdown / max(clearsky_swdown, 0.000001)) - 0.35))
+                  !* (1.35 * (swdown / max(swdown, 0.000001)) - 0.35))
    
    
       print *, "LWdown after calculation", WG%PhiLd(1005)
