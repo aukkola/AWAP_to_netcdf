@@ -302,7 +302,8 @@ CONTAINS
 
       !LWdown calculation
       REAL(sp), DIMENSION(np) :: swdown 
-
+      REAL(sp), DIMENSION(np) :: clearsky_swdown
+      
       !Local, VPD calculation
       REAL(sp), DIMENSION(np) :: sat_pressure0900, sat_pressure1500
       REAL(sp), DIMENSION(np) :: act_pressure, tmean
@@ -330,14 +331,20 @@ CONTAINS
           WG%coszen = ( SIN(WG%DecRad)*SIN(WG%LatRad) +&
               COS(WG%DecRad)*COS(WG%LatRad)*COS(TimeRad) )
               
+          clearsky_swdown = MAX((1)  &   ! PhiSd [MJ/m2/day]
+             * ( SIN(WG%DecRad)*SIN(WG%LatRad) + COS(WG%DecRad)*COS(WG%LatRad) &
+             * COS(TimeRad) ), 0.0) 
+              
       ELSEWHERE ! sun is down
           WG%PhiSd  = 0.0
           WG%coszen = 0.0
+          clearsky_swdown = 0.0
+          
       END WHERE
 
       WG%PhiSd    = WG%PhiSd*1e6/SecDay   ! Convert PhiSd: [MJ/m2/day] to [W/m2]
 
-      print *, "SWDOWN ", WG%PhiSd(1005)
+      print *, "SWDOWN ", WG%PhiSd
 
 ! -------------
 ! Precipitation
@@ -394,17 +401,12 @@ CONTAINS
       END WHERE
       WG%Temp = WG%Temp + 273.16 ! MMY, unit C->K
 
-      PRINT *,"WG%Temp", WG%Temp(1005) !!!!!
-      PRINT *,"WG%TempSunset", WG%TempSunset(1005) !!!!!
-      PRINT *,"WG%TempNightRate", WG%TempNightRate(1005) !!!!!
 
 ! -----------------------------------
 ! Water Vapour Pressure, Air Pressure
 ! -----------------------------------
       !WG%VapPmb = WG%VapPmbDay
       WG%PPa    = WG%PPaDay * 100. ! PSurf/GSWP3.BC.PSurf.3hrMap, pressure 1 [mb] = 100 [Pa]
-      PRINT *,"WG%PPaDay", WG%PPaDay(1005) !!!!!
-      PRINT *,"WG%PPa", WG%PPa(1005)       !!!!!
 
 ! ********************* MMY ************************
 
@@ -468,12 +470,15 @@ CONTAINS
       print *, "temp", WG%Temp(1005)
       print *, "actual vap pressure", act_pressure(1005)
 
+      print *, clearsky_swdown(1005)
+
+
       !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
       !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
       !                                (1.35 * (swdown / swdown_clear) - 0.35))
       
       WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
-                  * (1.35 * (swdown / WG%SolarNorm) - 0.35))
+                  * (1.35 * (swdown / max(clearsky_swdown, 0.000001) - 0.35))
  
       print *, "LWdown after calculation", WG%PhiLd(1005)
 
