@@ -56,7 +56,7 @@ MODULE CABLE_WEATHERGENERATOR
           TempNightRatePrev  ,&
           TempRangeDay       ,&
           TempRangeAft       ,&
-          clearsky_swdown       
+          swdown_clear       
 
      !   Solar and Temperature Params
      !   Hourly Met outgoing
@@ -128,7 +128,7 @@ CONTAINS
       ALLOCATE ( WG%PPa                (np) )  ! MMY  pressure [Pa] ! pressure [mb]
       ALLOCATE ( WG%QV                 (np) )  ! MMY  Specific Humidity [kg/kg]
       ALLOCATE ( WG%coszen             (np) )  ! cos(theta)
-      ALLOCATE ( WG%clearsky_swdown    (np) )  ! ANNA clear sky radiation [MJ day m-2]
+      ALLOCATE ( WG%swdown_clear       (np) )  ! ANNA clear sky radiation [MJ day m-2]
 
       WG%LatDeg(:) = latitude(:)
 
