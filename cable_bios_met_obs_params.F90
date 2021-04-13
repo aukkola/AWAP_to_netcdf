@@ -37,6 +37,10 @@ MODULE cable_bios_met_obs_params
     REAL(sp),     ALLOCATABLE :: next_tairmax_day(:)
     REAL(sp),     ALLOCATABLE :: next_sat_pressure0900(:)
     REAL(sp),     ALLOCATABLE :: next_act_pressure(:)
+    REAL(sp),     ALLOCATABLE :: sat_pressure0900(:)
+    REAL(sp),     ALLOCATABLE :: act_pressure(:)
+    REAL(sp),     ALLOCATABLE :: tmean(:)
+
     
 
     INTEGER(i4b) :: rain_unit, swdown_unit, wind_unit, &
@@ -162,6 +166,11 @@ MODULE cable_bios_met_obs_params
       ALLOCATE ( next_sat_pressure0900(mland)   ) 
       ALLOCATE (next_act_pressure(mland)   ) 
 
+      ALLOCATE (sat_pressure0900(mland)   ) 
+      ALLOCATE (act_pressure(mland)   ) 
+      ALLOCATE (tmean(mland)   ) 
+
+
 
 
 
@@ -193,7 +202,6 @@ MODULE cable_bios_met_obs_params
       TYPE(WEATHER_GENERATOR_TYPE) :: WG
       TYPE(FILE_NAME)              :: filename
       
-      REAL                :: sat_pressure0900, act_pressure, tmean
 
 
     ! CABLE is calculated in every grid's tile,and landpt(:)%cstart is the position
