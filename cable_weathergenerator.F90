@@ -475,7 +475,7 @@ CONTAINS
       WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
                   * (1.35 * (swdown / WG%SolarNorm) - 0.35))
  
-      print *, "LWdown after calculation", WG%PhiLd
+      print *, "LWdown after calculation", WG%PhiLd(1005)
 
       ! WG%PhiLd = epsilon * SBoltz * WG%Temp**4       ! [W/m2] (Brutsaert)
       ! 
