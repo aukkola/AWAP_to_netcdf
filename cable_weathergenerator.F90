@@ -193,7 +193,7 @@ CONTAINS
                COS(WG%LatRad)*COS(WG%DecRad)*SIN(HDLRad)) / Pi
                
                
-      WG%swdown_clear = (94.5 * (1 + 0.033 * cos((2*Pi*YearDay / 365))) / Pi) *
+      WG%swdown_clear = (94.5 * (1 + 0.033 * cos((2*Pi*YearDay / 365))) / Pi) * &
                        (HDLRad * sin(WG%DecRad) * sin(WG%LatRad) + &
                        cos(WG%DecRad) * cos(WG%LatRad) * 
                        sin(HDLRad))
