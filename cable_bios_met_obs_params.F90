@@ -293,7 +293,7 @@ MODULE cable_bios_met_obs_params
 
              OPEN (tairminnext_unit, FILE=TRIM(tairminnext_file), &
                    FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
-             READ (tairminnext_unit) next_tairmin_day - 273.15     ! Packed vector of daily AWAP/BIOS min air temp (deg C)
+             READ (tairminnext_unit) next_tairmin_day   ! Packed vector of daily AWAP/BIOS min air temp (deg C)
              CLOSE(tairminnext_unit)
              
              !ANNA add unit conversion
