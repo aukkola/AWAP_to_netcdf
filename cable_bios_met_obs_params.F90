@@ -303,7 +303,7 @@ MODULE cable_bios_met_obs_params
     !**************************************
 
           WG%TempMaxDayPrev = WG%TempMaxDay
-          !WG%VapPPa1500Prev = WG%VapPPa1500
+          WG%VapPPa1500Prev = WG%VapPPa1500
 
 
     !**************** MMY *****************
@@ -394,7 +394,7 @@ print *, "next day VPD", next_vph_0900(1005)
     !**************** MMY *****************
           IF (ktau == 1 .AND. CurYear == YearStart) THEN
              WG%TempMaxDayPrev = tairmax_day
-             !WG%VapPPa1500Prev = vph_1500
+             WG%VapPPa1500Prev = vph_1500
           END IF
 
     !**************************************

@@ -206,6 +206,8 @@ PROGRAM awap_to_netcdf
                             CurYear, ktau, kend, .FALSE.)
 
           data_temp = WG%PhiLd
+          print *, "LWDOWN in output ", WG%PhiLd(1005)
+
           CALL write_output(filename, LWdown_name, "LWdown", data_temp, dels,&
                             CurYear, ktau, kend, .TRUE. )
 
