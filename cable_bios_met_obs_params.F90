@@ -175,10 +175,15 @@ MODULE cable_bios_met_obs_params
       INTEGER(i4b)        :: error_status
       REAL                :: hod, doy, year
 
-      CHARACTER(200)      :: vph09next_file, tairminnext_file ! MMY
+      CHARACTER(200)      :: vph09next_file, tairminnext_file, tairmaxnext_file ! MMY
 
       TYPE(WEATHER_GENERATOR_TYPE) :: WG
       TYPE(FILE_NAME)              :: filename
+
+      REAL                :: next_tmean, next_tairmax_day, next_sat_pressure0900
+      REAL                :: next_tairmin_day, next_act_pressure, next_vph_0900
+      REAL                :: sat_pressure0900, act_pressure, tmean
+
 
     ! CABLE is calculated in every grid's tile,and landpt(:)%cstart is the position
     ! of 1st gridcell veg patch in main arrays, but in weathergenerator we don't
@@ -229,57 +234,57 @@ MODULE cable_bios_met_obs_params
           READ (tairmin_unit) tairmin_day       ! Packed vector of daily AWAP/BIOS min air temp (deg C) ! romove bios_rundate,
           CLOSE(tairmin_unit)
 
-          CALL GET_UNIT(vph09_unit)
-          OPEN (vph09_unit, FILE=TRIM(filename%vph09_file(counter)),      &
-                FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
-          READ (vph09_unit) vph_0900
-          CLOSE(vph09_unit)
-
-          CALL GET_UNIT(vph15_unit)
-          OPEN (vph15_unit, FILE=TRIM(filename%vph15_file(counter)),      &
-                FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
-          READ (vph15_unit) vph_1500
-          CLOSE(vph15_unit)
+          ! CALL GET_UNIT(vph09_unit)
+          ! OPEN (vph09_unit, FILE=TRIM(filename%vph09_file(counter)),      &
+          !       FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
+          ! READ (vph09_unit) vph_0900
+          ! CLOSE(vph09_unit)
+          ! 
+          ! CALL GET_UNIT(vph15_unit)
+          ! OPEN (vph15_unit, FILE=TRIM(filename%vph15_file(counter)),      &
+          !       FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
+          ! READ (vph15_unit) vph_1500
+          ! CLOSE(vph15_unit)
 
     !**************************************
           !ANNA: unit conversions
 
           !Rain from mm/s to mm/day
-          print *, "rain_day before", rain_day(1005)
+          !print *, "rain_day before", rain_day(1005)
           
           rain_day = rain_day * SecDay
           
-          print *, "rain_day after", rain_day(1005)
+          !print *, "rain_day after", rain_day(1005)
 
 
           !Tmin and Tmax from K to C
-          print *, "tmax before", tairmax_day(1005)
-          print *, "tmin before", tairmin_day(1005)
+          !print *, "tmax before", tairmax_day(1005)
+          !print *, "tmin before", tairmin_day(1005)
           
           tairmax_day = tairmax_day - 273.15
           tairmin_day = tairmin_day - 273.15
 
-          print *, "tmax after", tairmax_day(1005)
-          print *, "tmin after", tairmin_day(1005)
+          !print *, "tmax after", tairmax_day(1005)
+          !print *, "tmin after", tairmin_day(1005)
       
           !SWdown from W m-2 to MJ/day     
-          print *, "swdown before", swdown_day(1005)
+          !print *, "swdown before", swdown_day(1005)
       
           swdown_day = swdown_day * SecDay / 10.**6
           
-          print *, "swdown after", swdown_day(1005)
+          !print *, "swdown after", swdown_day(1005)
 
 
           !VPD sanity check
 
-          print *, "VPD 9:00", vph_0900(1005)
-          print *, "VPD 15:00", vph_1500(1005)
+          !print *, "VPD 9:00", vph_0900(1005)
+          !print *, "VPD 15:00", vph_1500(1005)
 
 
     !**************************************
 
           WG%TempMaxDayPrev = WG%TempMaxDay
-          WG%VapPPa1500Prev = WG%VapPPa1500
+          !WG%VapPPa1500Prev = WG%VapPPa1500
 
 
     !**************** MMY *****************
@@ -289,8 +294,11 @@ MODULE cable_bios_met_obs_params
              CALL GET_UNIT(vph09next_unit)
 
              tairminnext_file = filename%tairmin_file(counter+1)
-             vph09next_file   = filename%vph09_file(counter+1)
+             tairmaxnext_file = filename%tairmax_file(counter+1)
 
+             !vph09next_file   = filename%vph09_file(counter+1)
+
+             !Next day min temp
              OPEN (tairminnext_unit, FILE=TRIM(tairminnext_file), &
                    FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
              READ (tairminnext_unit) next_tairmin_day   ! Packed vector of daily AWAP/BIOS min air temp (deg C)
@@ -299,19 +307,60 @@ MODULE cable_bios_met_obs_params
              !ANNA add unit conversion
              next_tairmin_day = next_tairmin_day - 273.15
              
-             OPEN (vph09next_unit, FILE=TRIM(vph09next_file),     &
+             !Max temp
+             OPEN (tairmaxnext_unit, FILE=TRIM(tairmaxnext_file), &
                    FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
-             READ (vph09next_unit) next_vph_0900
-             CLOSE(vph09next_unit)
+             READ (tairmaxnext_unit) next_tairmax_day   ! Packed vector of daily AWAP/BIOS min air temp (deg C)
+             CLOSE(tairmaxnext_unit)
+             
+             !ANNA add unit conversion
+             next_tairmax_day = next_tairmax_day - 273.15
+  
+             
+             ! 
+             ! OPEN (vph09next_unit, FILE=TRIM(vph09next_file),     &
+             !       FORM='BINARY', STATUS='OLD',IOSTAT=error_status)
+             ! READ (vph09next_unit) next_vph_0900
+             ! CLOSE(vph09next_unit)
+            
+             ! Next day 9am VPD
+             !Use mean temp for 9am
+             next_tmean = (next_tairmax_day + next_tairmin_day) / 2.
+             
+             next_sat_pressure0900 = 610.8 * exp((17.27 * next_tmean) / (237.3 + next_tmean))
+
+             !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
+             !Always calculate actual pressure from tmin
+             next_act_pressure = 610.8 * exp((17.27 * next_tairmin_day) / (237.3 + next_tairmin_day))
+             
+             !Calculate VPD as sat - actual, and convert from Pa to hPa
+             next_vph_0900 =  (next_sat_pressure0900 - next_act_pressure) * 0.01
+
+             
 
           ELSE
 
              next_tairmin_day = tairmin_day
-             next_vph_0900    = vph_0900
+             !next_vph_0900    = vph_0900
+             
+             !Calculate next VPD 9am
+             !Use mean temp for 9am
+             tmean = (tairmax_day + tairmin_day) / 2.
+             
+             sat_pressure0900 = 610.8 * exp((17.27 * tmean) / (237.3 + tmean))
+
+             !Actual vapour pressure (eq. 36 in AWRA manual), in Pa
+             !Always calculate actual pressure from tmin
+             act_pressure = 610.8 * exp((17.27 * tairmin_day) / (237.3 + tairmin_day))
+             
+             !Calculate VPD as sat - actual, and convert from Pa to hPa
+             next_vph_0900 =  (sat_pressure0900 - act_pressure) * 0.01
+
+             
 
           END IF
 
-print *, "next day tmin", next_tairmin_day(1005)
+print *, "next day VPD", next_vpd_0900(1005)
 
 
     !***************************************
@@ -319,17 +368,14 @@ print *, "next day tmin", next_tairmin_day(1005)
           WG%WindDay        = wind_day !MMY, from McVicar dataset
           WG%TempMinDay     = tairmin_day
           WG%TempMaxDay     = tairmax_day
-          WG%VapPPa0900     = vph_0900
-          WG%VapPPa1500     = vph_1500
-
-print *, "TempMaxDay in cable_bios", WG%TempMaxDay(1005)
-print *, "TempMinDay in cable_bios", WG%TempMinDay(1005)
+          !WG%VapPPa0900     = vph_0900
+          !WG%VapPPa1500     = vph_1500
 
 
     !**************** MMY *****************
           IF (ktau == 1 .AND. CurYear == YearStart) THEN
              WG%TempMaxDayPrev = tairmax_day
-             WG%VapPPa1500Prev = vph_1500
+             !WG%VapPPa1500Prev = vph_1500
           END IF
 
     !**************************************
