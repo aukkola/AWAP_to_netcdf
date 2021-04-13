@@ -55,7 +55,8 @@ MODULE CABLE_WEATHERGENERATOR
           TempNightRate      ,&
           TempNightRatePrev  ,&
           TempRangeDay       ,&
-          TempRangeAft
+          TempRangeAft       ,&
+          clearsky_swdown       
 
      !   Solar and Temperature Params
      !   Hourly Met outgoing
@@ -127,6 +128,7 @@ CONTAINS
       ALLOCATE ( WG%PPa                (np) )  ! MMY  pressure [Pa] ! pressure [mb]
       ALLOCATE ( WG%QV                 (np) )  ! MMY  Specific Humidity [kg/kg]
       ALLOCATE ( WG%coszen             (np) )  ! cos(theta)
+      ALLOCATE ( WG%clearsky_swdown    (np) )  ! ANNA clear sky radiation [MJ day m-2]
 
       WG%LatDeg(:) = latitude(:)
 
@@ -189,7 +191,12 @@ CONTAINS
       WG%SolarNorm =  &                          ! Paltridge and Platt eq [3.22]
                (HDLRad*SIN(WG%LatRad)*SIN(WG%DecRad) + &
                COS(WG%LatRad)*COS(WG%DecRad)*SIN(HDLRad)) / Pi
-
+               
+               
+      WG%swdown_clear = (94.5 * (1 + 0.033 * cos((2*Pi*YearDay / 365))) / Pi) *
+                       (HDLRad * sin(WG%DecRad) * sin(WG%LatRad) + &
+                       cos(WG%DecRad) * cos(WG%LatRad) * 
+                       sin(HDLRad))
       ! ----
       ! Wind
       ! ----
@@ -235,16 +242,11 @@ CONTAINS
           WG%TimeMaxTemp = WG%TimeSunset - MIN(4.,( WG%DayLength * 0.4))             ! Hx
       END WHERE
       WG%TimeSunsetPrev  = WG%TimeSunset - 24.     ! * Ho-24h (a negative hour)
-      TimeSunriseNext    = WG%TimeSunrise + 24.    ! Hp
-      
-      print *, "max temp in sunset", WG%TempMaxDay(1005)
-      print *, "min temp in sunset", WG%TempMinDayNext(1005)
-      
+      TimeSunriseNext    = WG%TimeSunrise + 24.    ! Hp    
       
       WG%TempSunset      = WG%TempMaxDay - &
                          (0.39 * (WG%TempMaxDay - WG%TempMinDayNext))  ! To
                          
-      print *, "tempsunset in sunset", WG%TempSunset(1005)
       WG%TempSunsetPrev  = WG%TempMaxDayPrev - &
                          (0.39 * (WG%TempMaxDayPrev - WG%TempMinDay))  ! * To-24h
       WG%TempRangeDay    = WG%TempMaxDay - WG%TempMinDay               ! alpha = Tx-Tn
@@ -463,10 +465,9 @@ CONTAINS
 ! ----------------------------
 
       swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
-      clearsky_swdown = clearsky_swdown * SecDay / 1e6 !Wm-2 to MJ/day
       
       print *, "swdown LW calculation", swdown(1005)
-      print *, "solarNorm LW calculation", WG%SolarNorm(1005)
+      print *, "clearsky SW in LW calculation", WG%swdown_clear(1005)
       print *, "sboltz", SBoltz
       print *, "temp", WG%Temp(1005)
       print *, "actual vap pressure", act_pressure(1005)
@@ -479,7 +480,7 @@ CONTAINS
       !                                (1.35 * (swdown / swdown_clear) - 0.35))
       
       WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
-                  * (1.35 * (swdown / max(clearsky_swdown, 0.000001)) - 0.35))
+                  * (1.35 * (swdown / max(WG%swdown_clear, 0.000001)) - 0.35))
                   !* (1.35 * (swdown / max(swdown, 0.000001)) - 0.35))
    
    
