@@ -379,7 +379,7 @@ MODULE cable_bios_met_obs_params
 
           END IF
 
-print *, "next day VPD", next_vpd_0900(1005)
+print *, "next day VPD", next_vph_0900(1005)
 
 
     !***************************************
