@@ -33,11 +33,16 @@ MODULE cable_bios_met_obs_params
     REAL(sp),     ALLOCATABLE :: next_tairmin_day(:)  ! Packed vector of next day's AWAP/BIOS min air temp (deg C)
     REAL(sp),     ALLOCATABLE :: prev_vph_1500(:)
     REAL(sp),     ALLOCATABLE :: next_vph_0900(:)
+    REAL(sp),     ALLOCATABLE :: next_tmean(:)
+    REAL(sp),     ALLOCATABLE :: next_tairmax_day(:)
+    REAL(sp),     ALLOCATABLE :: next_sat_pressure0900(:)
+    REAL(sp),     ALLOCATABLE :: next_act_pressure(:)
+    
 
     INTEGER(i4b) :: rain_unit, swdown_unit, wind_unit, &
                     tairmax_unit, tairmin_unit, & ! Met file unit numbers
                     vph09_unit, vph15_unit,     & ! MMY
-                    tairminnext_unit, vph09next_unit ! MMY
+                    tairminnext_unit, tairmaxnext_unit, vph09next_unit ! MMY
 
     REAL(sp), PARAMETER :: SecDay = 86400.
 
@@ -152,6 +157,14 @@ MODULE cable_bios_met_obs_params
       ALLOCATE (prev_vph_1500(mland)   ) ! MMY
       ALLOCATE (next_vph_0900(mland)   ) ! MMY
 
+      ALLOCATE (next_tmean(mland)   ) 
+      ALLOCATE (next_tairmax_day(mland)   ) 
+      ALLOCATE ( next_sat_pressure0900(mland)   ) 
+      ALLOCATE (next_act_pressure(mland)   ) 
+
+
+
+
     ! Initialise Weather Generator
       CALL WGEN_INIT( WG, mland, latitude, dels )
 
@@ -179,9 +192,7 @@ MODULE cable_bios_met_obs_params
 
       TYPE(WEATHER_GENERATOR_TYPE) :: WG
       TYPE(FILE_NAME)              :: filename
-
-      REAL                :: next_tmean, next_tairmax_day, next_sat_pressure0900
-      REAL                :: next_tairmin_day, next_act_pressure, next_vph_0900
+      
       REAL                :: sat_pressure0900, act_pressure, tmean
 
 
