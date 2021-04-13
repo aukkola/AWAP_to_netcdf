@@ -459,42 +459,39 @@ CONTAINS
 ! Alternate longwave formulation ! LWdown/GSWP3.BC.LWdown.3hrMap
 ! ----------------------------
 
-      swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
-      
-      print *, "swdown LW calculation", swdown(1005)
-      print *, "clearsky SW in LW calculation", WG%swdown_clear(1005)
-      print *, "sboltz", SBoltz
-      print *, "temp", WG%Temp(1005)
-      print *, "actual vap pressure", act_pressure(1005)
-
-      print *, clearsky_swdown(1005)
-
-
-      !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
-      !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
-      !                                (1.35 * (swdown / swdown_clear) - 0.35))
-      
-      WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
-                  * (1.35 * (swdown / max(WG%swdown_clear, 0.000001)) - 0.35))
-                  !* (1.35 * (swdown / max(swdown, 0.000001)) - 0.35))
+      ! swdown = WG%PhiSd * SecDay / 1e6 !Wm-2 to MJ/day
+      ! 
+      ! print *, "swdown LW calculation", swdown(1005)
+      ! print *, "clearsky SW in LW calculation", WG%swdown_clear(1005)
+      ! print *, "sboltz", SBoltz
+      ! print *, "temp", WG%Temp(1005)
+      ! print *, "actual vap pressure", act_pressure(1005)
+      ! 
+      ! 
+      ! !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
+      ! !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
+      ! !                                (1.35 * (swdown / swdown_clear) - 0.35))
+      ! 
+      ! WG%PhiLd = SBoltz * WG%Temp**(4) * (1. - (1.- 0.65*(act_pressure / WG%Temp)**(0.14)) &
+      !             * (1.35 * (swdown / max(WG%swdown_clear, 0.000001)) - 0.35))
+      !             !* (1.35 * (swdown / max(swdown, 0.000001)) - 0.35))
    
    
-      print *, "LWdown after calculation", WG%PhiLd(1005)
 
-      ! WG%PhiLd = epsilon * SBoltz * WG%Temp**4       ! [W/m2] (Brutsaert)
-      ! 
-      ! WHERE (WG%PhiSd.GT.50.0)
-      !     adjust_fac = ((1.17)**(WG%SolarNorm))/1.17
-      ! ELSEWHERE
-      !     adjust_fac = 0.9
-      ! ENDWHERE
-      ! 
-      ! WG%PhiLd = WG%PhiLd /adjust_fac * (1.0 + WG%PhiSd/8000.)
-      !           ! adjustment (formulation from Gab Abramowitz)
-      ! 
-      ! WHERE ((WG%PhiLd.GT.500.00).OR.(WG%PhiLd.LT.100.00))
-      !     WG%PhiLd = PhiLd_Swinbank
-      ! ENDWHERE
+      WG%PhiLd = epsilon * SBoltz * WG%Temp**4       ! [W/m2] (Brutsaert)
+      
+      WHERE (WG%PhiSd.GT.50.0)
+          adjust_fac = ((1.17)**(WG%SolarNorm))/1.17
+      ELSEWHERE
+          adjust_fac = 0.9
+      ENDWHERE
+      
+      WG%PhiLd = WG%PhiLd /adjust_fac * (1.0 + WG%PhiSd/8000.)
+                ! adjustment (formulation from Gab Abramowitz)
+      
+      WHERE ((WG%PhiLd.GT.500.00).OR.(WG%PhiLd.LT.100.00))
+          WG%PhiLd = PhiLd_Swinbank
+      ENDWHERE
       
       IF (ANY((WG%PhiLd.GT.950.00).OR.(WG%PhiLd.LT.0.00))) THEN
           write(*,*) 'PhiLD out of range'
