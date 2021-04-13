@@ -305,6 +305,7 @@ MODULE cable_bios_met_obs_params
           WG%TempMaxDayPrev = WG%TempMaxDay
           WG%VapPPa1500Prev = WG%VapPPa1500
 
+print *, "prev day VPD 3pm", WG%VapPPa1500Prev
 
     !**************** MMY *****************
           IF (ktau /= kend .and. CurYear /= YearEnd) THEN

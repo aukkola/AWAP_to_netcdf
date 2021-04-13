@@ -464,8 +464,9 @@ CONTAINS
 
       print *, "swdown LW calculation", swdown(1005)
       print *, "solarNorm LW calculation", WG%SolarNorm(1005)
-      
-      
+      print *, "sboltz", SBoltz
+      print *, "temp", WG%Temp(1005)
+      print *, "actual vap pressure", act_pressure(1005)
 
       !Incoming longwave radiation [W m-2] (section 3.2.3 first equation)
       !lwdown <- sigma * tmean_K^4 * (1 - (1- 0.65*(vap_pressure / tmean_K)^0.14) *
