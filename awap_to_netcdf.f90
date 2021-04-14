@@ -22,7 +22,7 @@ PROGRAM awap_to_netcdf
     INTEGER     :: kstart, kend, ktau, ktauday, counter, YYYY
     INTEGER     :: CurYear, YearStart, YearEnd ! MMY
     INTEGER     :: LOY
-    CHARACTER(4):: CurYear_CHAR
+    CHARACTER(4) :: CurYear_CHAR
     CHARACTER(500) :: model
     CHARACTER(500) :: experiment
     CHARACTER(500) :: bc_method
