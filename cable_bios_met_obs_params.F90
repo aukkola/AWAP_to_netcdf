@@ -309,7 +309,7 @@ MODULE cable_bios_met_obs_params
           IF (ktau /= kend .and. CurYear /= YearEnd) THEN
 
              CALL GET_UNIT(tairminnext_unit)  ! Minimum air temperature
-             CALL GET_UNIT(vph09next_unit)
+             !CALL GET_UNIT(vph09next_unit)
 
              tairminnext_file = filename%tairmin_file(counter+1)
              tairmaxnext_file = filename%tairmax_file(counter+1)

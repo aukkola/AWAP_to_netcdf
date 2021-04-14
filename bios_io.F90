@@ -182,31 +182,31 @@ MODULE bios_io_mod !    MMY
       END DO
       CLOSE(iunit)
 
-      ! vph09
-      commandline = 'find '//TRIM(filename%path_in)//\
-        '/vpd_09 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
-      ok = systemqq(commandline)
-      commandline = 'sort -n <./temp.txt >./namelist_vph09.txt'
-      ok = systemqq(commandline)
-      OPEN (iunit, file="namelist_vph09.txt",status="old",action="read")
-      DO i = 1,file_num
-         READ (iunit, '(A)') filename%vph09_file(i)
-      END DO
-      CLOSE(iunit)
-
-      ! vph15
-      commandline = 'find '//TRIM(filename%path_in)//\
-        '/vpd_15 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
-      ok = systemqq(commandline)
-      commandline = 'sort -n <./temp.txt >./namelist_vph15.txt'
-      ok = systemqq(commandline)
-      OPEN (iunit, file="namelist_vph15.txt",status="old",action="read")
-      DO i = 1,file_num
-         READ (iunit, '(A)') filename%vph15_file(i)
-      END DO
-      CLOSE(iunit)
-
-      ok = systemqq('rm temp.txt')
+!      ! vph09
+!      commandline = 'find '//TRIM(filename%path_in)//\
+!        '/vpd_09 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+!      ok = systemqq(commandline)
+!      commandline = 'sort -n <./temp.txt >./namelist_vph09.txt'
+!      ok = systemqq(commandline)
+!      OPEN (iunit, file="namelist_vph09.txt",status="old",action="read")
+!      DO i = 1,file_num
+!         READ (iunit, '(A)') filename%vph09_file(i)
+!      END DO
+!      CLOSE(iunit)
+!
+!      ! vph15
+!      commandline = 'find '//TRIM(filename%path_in)//\
+!        '/vpd_15 -name "*.flt" -fprintf ./temp.txt "%p\n"' ! MMY
+!      ok = systemqq(commandline)
+!      commandline = 'sort -n <./temp.txt >./namelist_vph15.txt'
+!      ok = systemqq(commandline)
+!      OPEN (iunit, file="namelist_vph15.txt",status="old",action="read")
+!      DO i = 1,file_num
+!         READ (iunit, '(A)') filename%vph15_file(i)
+!      END DO
+!      CLOSE(iunit)
+!
+!      ok = systemqq('rm temp.txt')
 
       PRINT *, 'POINT 7 input filenames, e.g. ', TRIM(filename%rain_file(file_num)) ! Debug
 
